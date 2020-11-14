@@ -11,10 +11,6 @@ public class MockIncomingItemWatcher implements IncomingItemWatcher {
     private AtomicBoolean running = new AtomicBoolean(false);
     
     
-    public synchronized void send(String name, Object type, String content) {
-        send(IncomingItem.of(name, type, content));
-    }
-
     public synchronized void send(IncomingItem incomingItem) {
         if (running.get()) {
             runListeners(incomingItem);
