@@ -6,7 +6,10 @@ public interface IncomingItemWatcher {
 
     public void watch() throws IOException;
     
-    public void stop();
+    public default void stop() {
+        throw new UnsupportedOperationException(
+                "This watcher does not support explicit stop");
+    }
     
     public void addListener(IncomingItemListener listener);
     
