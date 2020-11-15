@@ -12,7 +12,7 @@ import java.io.OutputStream;
 import javax.imageio.ImageIO;
 
 import myns.histbatch.api.ContentProcessor;
-import myns.histbatch.api.image.GrayScaleExtractor;
+import myns.histbatch.impl.image.GrayScaleHistogramCollector;
 
 public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor {
     
@@ -21,16 +21,16 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
     private static final int HEIGHT = 100;
     
     
-    private final GrayScaleExtractor grayScaleExtractor;
+    private final GrayScaleHistogramCollector grayScaleHistogramCollector;
     
     private final String formatName;
     
     
     public ImageGrayScaleHistogramContentProcessor(
-            GrayScaleExtractor grayScaleExtractor,
+            GrayScaleHistogramCollector grayScaleHistogramCollector,
             String formatName) {
 
-        this.grayScaleExtractor = grayScaleExtractor;
+        this.grayScaleHistogramCollector = grayScaleHistogramCollector;
         this.formatName = formatName;
     }
     
@@ -38,29 +38,9 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
     @Override
     public void process(InputStream in, OutputStream out) throws IOException {
         int[] data = new int[LENGTH];
-        int max = collectData(ImageIO.read(in), data);
+        int max = grayScaleHistogramCollector.collect(ImageIO.read(in), data);
         RenderedImage histogramImage = drawHistogram(data, max);
         ImageIO.write(histogramImage, formatName, out);
-    }
-    
-    private int collectData(BufferedImage image, int[] destData) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        int max = 0;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int rgb = image.getRGB(x, y);
-                Color color = new Color(rgb);
-                int grey = grayScaleExtractor.extractFrom(color);
-                destData[grey]++;
-                if (destData[grey] > max) {
-                    max = destData[grey];
-                }
-            }
-        }
-        
-        return max;
     }
     
     private RenderedImage drawHistogram(int[] data, int max) {
