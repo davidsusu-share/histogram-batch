@@ -1,8 +1,10 @@
 package myns.histbatch.api.watcher;
 
+import java.io.IOException;
+
 public interface IncomingItemWatcher {
 
-    public void watch();
+    public void watch() throws IOException;
     
     public void stop();
     
