@@ -8,6 +8,7 @@ import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
@@ -30,8 +31,8 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
             GrayScaleHistogramCollector grayScaleHistogramCollector,
             String formatName) {
 
-        this.grayScaleHistogramCollector = grayScaleHistogramCollector;
-        this.formatName = formatName;
+        this.grayScaleHistogramCollector = Objects.requireNonNull(grayScaleHistogramCollector);
+        this.formatName = Objects.requireNonNull(formatName);
     }
     
 

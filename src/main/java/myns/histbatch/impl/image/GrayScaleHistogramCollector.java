@@ -2,6 +2,7 @@ package myns.histbatch.impl.image;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 import myns.histbatch.api.image.GrayScaleExtractor;
 
@@ -11,7 +12,7 @@ public class GrayScaleHistogramCollector {
     
     
     public GrayScaleHistogramCollector(GrayScaleExtractor grayScaleExtractor) {
-        this.grayScaleExtractor = grayScaleExtractor;
+        this.grayScaleExtractor = Objects.requireNonNull(grayScaleExtractor);
     }
     
     
