@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-class DefaultIncomingItem implements IncomingItem {
+public class DefaultIncomingItem implements IncomingItem {
 
     private final String name;
 
@@ -40,7 +40,7 @@ class DefaultIncomingItem implements IncomingItem {
     }
 
     @Override
-    public InputStream inputStream() throws IOException {
+    public InputStream openInputStream() throws IOException {
         return inputStreamFactory.create();
     }
     

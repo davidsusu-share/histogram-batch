@@ -1,23 +1,25 @@
 package myns.histbatch;
 
-import myns.histbatch.api.watcher.IncomingItem;
-import myns.histbatch.api.watcher.MockIncomingItemWatcher;
+import java.io.File;
+import java.io.IOException;
+
+import myns.histbatch.api.watcher.IncomingItemWatcher;
+import myns.histbatch.impl.watcher.WatchServiceIncomingItemWatcher;
 
 public class Main {
 
-    public static void main(String[] args) {
-        MockIncomingItemWatcher watcher = new MockIncomingItemWatcher();
-        watcher.addListener(item -> System.out.println(item.name()));
-        new Thread(watcher::watch).start();
-
-        watcher.send(IncomingItem.of("hello", "text", "Hello"));
-        watcher.send(IncomingItem.of("world", "text", "World"));
-        watcher.send(IncomingItem.of("lorem", "text", "Lorem"));
-        watcher.send(IncomingItem.of("ipsum", "text", "Ipsum"));
+    public static void main(String[] args) throws IOException {
         
-        watcher.stop();
+        // FIXME
+        String path = "/home/david/develop/pf/2020.11-neti/input";
+        int keepAliveSeconds = 30;
         
-        System.out.println("FINISHED");
+        IncomingItemWatcher watcher = new WatchServiceIncomingItemWatcher(
+                new File(path).toPath(), keepAliveSeconds);
+        watcher.watch();
+        
+        // TODO
+        
     }
     
 }

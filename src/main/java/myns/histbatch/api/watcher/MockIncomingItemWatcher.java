@@ -9,7 +9,7 @@ public class MockIncomingItemWatcher extends AbstractIncomingItemWatcher {
     
     public synchronized void send(IncomingItem incomingItem) {
         if (running.get()) {
-            runListeners(incomingItem);
+            runListeners(incomingItem, success -> {});
         }
     }
     

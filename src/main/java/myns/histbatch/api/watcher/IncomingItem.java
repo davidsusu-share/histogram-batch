@@ -11,7 +11,7 @@ public interface IncomingItem {
     
     public Object type();
     
-    public InputStream inputStream() throws IOException;
+    public InputStream openInputStream() throws IOException;
     
 
     public static IncomingItem of(String name, Object type, String content) {

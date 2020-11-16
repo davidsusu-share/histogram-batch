@@ -18,9 +18,9 @@ public abstract class AbstractIncomingItemWatcher implements IncomingItemWatcher
         listeners.remove(listener);
     }
 
-    protected synchronized void runListeners(IncomingItem incomingItem) {
+    protected synchronized void runListeners(IncomingItem incomingItem, SuccessCallback successCallback) {
         for (IncomingItemListener listener : listeners) {
-            listener.receive(incomingItem);
+            listener.receive(incomingItem, successCallback);
         }
     }
     
