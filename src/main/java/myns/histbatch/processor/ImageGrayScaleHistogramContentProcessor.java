@@ -16,6 +16,8 @@ import myns.histbatch.image.GrayScaleHistogramCollector;
 
 public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor {
     
+    private static final String DEFAULT_OUT_FORMAT_NAME = "bmp";
+    
     private static final int LENGTH = 256;
     
     private static final int HEIGHT = 100;
@@ -23,15 +25,21 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
     
     private final GrayScaleHistogramCollector grayScaleHistogramCollector;
     
-    private final String formatName;
+    private final String outFormatName;
     
+
+    public ImageGrayScaleHistogramContentProcessor(
+            GrayScaleHistogramCollector grayScaleHistogramCollector) {
+        
+        this(grayScaleHistogramCollector, DEFAULT_OUT_FORMAT_NAME);
+    }
     
     public ImageGrayScaleHistogramContentProcessor(
             GrayScaleHistogramCollector grayScaleHistogramCollector,
             String formatName) {
 
         this.grayScaleHistogramCollector = Objects.requireNonNull(grayScaleHistogramCollector);
-        this.formatName = Objects.requireNonNull(formatName);
+        this.outFormatName = Objects.requireNonNull(formatName);
     }
     
 
@@ -40,7 +48,7 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
         int[] data = new int[LENGTH];
         int max = grayScaleHistogramCollector.collect(ImageIO.read(in), data);
         RenderedImage histogramImage = drawHistogram(data, max);
-        ImageIO.write(histogramImage, formatName, out);
+        ImageIO.write(histogramImage, outFormatName, out);
     }
     
     private RenderedImage drawHistogram(int[] data, int max) {
