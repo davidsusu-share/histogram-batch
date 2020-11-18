@@ -1,4 +1,4 @@
-package myns.histbatch.impl;
+package myns.histbatch.impl.processor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
