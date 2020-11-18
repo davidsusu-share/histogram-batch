@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-import myns.histbatch.impl.text.WordPairStatisticsCollector.ResultEntry;
+import myns.histbatch.text.WordPairStatisticsCollector.ResultEntry;
 
 class WordPairStatisticsCollectorResultEntryTest {
 

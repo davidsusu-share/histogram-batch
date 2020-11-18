@@ -1,8 +1,6 @@
-package myns.histbatch.impl.image;
+package myns.histbatch.image;
 
 import java.awt.Color;
-
-import myns.histbatch.api.image.GrayScaleExtractor;
 
 public class AvgGrayScaleExtractor implements GrayScaleExtractor {
 

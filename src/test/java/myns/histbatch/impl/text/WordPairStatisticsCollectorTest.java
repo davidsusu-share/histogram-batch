@@ -10,7 +10,8 @@ import java.util.Locale;
 
 import org.junit.jupiter.api.Test;
 
-import myns.histbatch.impl.text.WordPairStatisticsCollector.ResultEntry;
+import myns.histbatch.text.WordPairStatisticsCollector;
+import myns.histbatch.text.WordPairStatisticsCollector.ResultEntry;
 
 class WordPairStatisticsCollectorTest {
 

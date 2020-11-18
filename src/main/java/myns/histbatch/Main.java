@@ -3,8 +3,8 @@ package myns.histbatch;
 import java.io.File;
 import java.io.IOException;
 
-import myns.histbatch.api.watcher.IncomingItemWatcher;
-import myns.histbatch.impl.watcher.WatchServiceIncomingItemWatcher;
+import myns.histbatch.watcher.IncomingItemWatcher;
+import myns.histbatch.watcher.WatchServiceIncomingItemWatcher;
 
 public class Main {
 

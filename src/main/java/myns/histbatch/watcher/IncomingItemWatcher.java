@@ -1,4 +1,4 @@
-package myns.histbatch.api.watcher;
+package myns.histbatch.watcher;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package myns.histbatch.impl.text;
+package myns.histbatch.text;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package myns.histbatch.impl.processor;
+package myns.histbatch.processor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -12,8 +12,7 @@ import java.util.Objects;
 
 import javax.imageio.ImageIO;
 
-import myns.histbatch.api.ContentProcessor;
-import myns.histbatch.impl.image.GrayScaleHistogramCollector;
+import myns.histbatch.image.GrayScaleHistogramCollector;
 
 public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor {
     

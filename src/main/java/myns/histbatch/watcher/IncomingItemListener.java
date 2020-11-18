@@ -1,4 +1,4 @@
-package myns.histbatch.api.watcher;
+package myns.histbatch.watcher;
 
 @FunctionalInterface
 public interface IncomingItemListener {

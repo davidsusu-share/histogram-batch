@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import myns.histbatch.api.image.GrayScaleExtractor;
+import myns.histbatch.image.GrayScaleExtractor;
+import myns.histbatch.image.LuminancePreservingGrayScaleExtractor;
 
 class LuminancePreservingGrayScaleExtractorTest {
 

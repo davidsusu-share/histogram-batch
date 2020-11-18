@@ -1,4 +1,4 @@
-package myns.histbatch.impl.watcher;
+package myns.histbatch.watcher;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,9 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import myns.histbatch.api.watcher.AbstractIncomingItemWatcher;
-import myns.histbatch.api.watcher.IncomingItem;
 
 public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher {
 

@@ -13,6 +13,9 @@ import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 
+import myns.histbatch.image.AvgGrayScaleExtractor;
+import myns.histbatch.image.GrayScaleHistogramCollector;
+
 class GrayScaleHistogramCollectorTest {
 
     @Test

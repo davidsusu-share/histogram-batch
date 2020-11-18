@@ -1,4 +1,4 @@
-package myns.histbatch.impl.watcher;
+package myns.histbatch.watcher;
 
 import java.util.Objects;
 

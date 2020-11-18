@@ -1,4 +1,4 @@
-package myns.histbatch.api.image;
+package myns.histbatch.image;
 
 import java.awt.Color;
 

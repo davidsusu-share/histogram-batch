@@ -1,9 +1,9 @@
-package myns.histbatch.api.watcher;
+package myns.histbatch.watcher;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-import myns.histbatch.api.watcher.DefaultIncomingItem.InputStreamFactory;
+import myns.histbatch.watcher.DefaultIncomingItem.InputStreamFactory;
 
 public interface IncomingItem {
 

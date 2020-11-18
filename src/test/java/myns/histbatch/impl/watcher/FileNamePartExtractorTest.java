@@ -6,6 +6,8 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import myns.histbatch.watcher.FileNamePartExtractor;
+
 class FileNamePartExtractorTest {
 
     @Test

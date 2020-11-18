@@ -1,4 +1,4 @@
-package myns.histbatch.impl.watcher;
+package myns.histbatch.watcher;
 
 import java.io.File;
 import java.util.regex.Pattern;

@@ -1,10 +1,8 @@
-package myns.histbatch.impl.image;
+package myns.histbatch.image;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Objects;
-
-import myns.histbatch.api.image.GrayScaleExtractor;
 
 public class GrayScaleHistogramCollector {
 
