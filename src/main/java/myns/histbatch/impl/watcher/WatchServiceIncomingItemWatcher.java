@@ -13,6 +13,9 @@ import java.nio.file.WatchService;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import myns.histbatch.api.watcher.AbstractIncomingItemWatcher;
 import myns.histbatch.api.watcher.IncomingItem;
 
@@ -21,6 +24,10 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
     private static final int DEFAULT_KEEPALIVE_SECONDS = 60;
     
     private static final WatchEvent.Kind<Path> EVENT_KIND = StandardWatchEventKinds.ENTRY_CREATE;
+    
+    
+    private static final Logger logger = LoggerFactory.getLogger(
+            WatchServiceIncomingItemWatcher.class);
     
     
     private final Path path;
@@ -124,7 +131,7 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
         try {
             mimeType = detectFileMimeType(file);
         } catch (IOException e) {
-            // TODO: log...
+            logger.error("Can not detect file type: {}", file, e);
         }
         
         return mimeType != null ? new MimeItemType(mimeType) : null;
@@ -135,10 +142,18 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
     }
     
     private void handleCompleted(File file, boolean success) {
+        if (!success) {
+            logger.warn("Unable to process file: {}", file);
+        }
+        
         try {
             completionCallback.completed(file, success);
         } catch (Exception e) {
-            // TODO: log...
+            logger.error("Failed to run callback for: {}", file, e);
+        }
+        
+        if (success) {
+            logger.info("Successfully processed file: {}", file);
         }
     }
     
