@@ -49,7 +49,7 @@ public class HistogramBatchService implements Runnable {
     
     private final Locale locale;
     
-    private final int wordPairLimit;
+    private final int wordPairsMaxIgnore;
     
 
     public HistogramBatchService(String directory) {
@@ -65,7 +65,7 @@ public class HistogramBatchService implements Runnable {
         this.keepAliveSeconds = builder.keepAliveSeconds;
         this.threadCount = builder.threadCount;
         this.locale = builder.locale;
-        this.wordPairLimit = builder.wordPairLimit;
+        this.wordPairsMaxIgnore = builder.wordPairsMaxIgnore;
     }
     
     public static Builder builder() {
@@ -110,7 +110,7 @@ public class HistogramBatchService implements Runnable {
                 item -> openOutputStreamFor(item, "text", ".txt"),
                 new WordPairStatisticsContentProcessor(
                         new WordPairStatisticsCollector(
-                                locale, wordPairLimit)),
+                                locale, wordPairsMaxIgnore)),
                 item -> TEXT_MATCHER.test(item.type()),
                 executorService));
         
@@ -130,7 +130,11 @@ public class HistogramBatchService implements Runnable {
         }
         
         String targetFilename = item.name() + suffix;
-        return new FileOutputStream(new File(targetDirectory, targetFilename));
+        File targetFile = new File(targetDirectory, targetFilename);
+        
+        logger.debug("Open file for writing output: {}", targetFile);
+        
+        return new FileOutputStream(targetFile);
     }
     
     private void onComplete(IncomingItem item, File file, boolean success) throws IOException {
@@ -169,7 +173,7 @@ public class HistogramBatchService implements Runnable {
         
         private Locale locale = Locale.getDefault();
         
-        private int wordPairLimit = 5;
+        private int wordPairsMaxIgnore = 5;
         
         
         private Builder() {
@@ -209,8 +213,8 @@ public class HistogramBatchService implements Runnable {
                 return this;
             }
             
-            public Optionals wordPairLimit(int wordPairLimit) {
-                Builder.this.wordPairLimit = wordPairLimit;
+            public Optionals wordPairsMaxIgnore(int wordPairsMaxIgnore) {
+                Builder.this.wordPairsMaxIgnore = wordPairsMaxIgnore;
                 return this;
             }
             

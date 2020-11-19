@@ -16,8 +16,9 @@ public class Main implements Runnable {
     @Option(names = "-t", description = "Thread count", arity = "1", required = false)
     public int threadCount = 1;
 
-    @Option(names = "-n", description = "Word pair limit", arity = "1", required = false)
-    public int wordPairLimit = 3;
+    @Option(names = "-n", description = "Maximum number of word pairs to ignore",
+            arity = "1", required = false)
+    public int wordPairsMaxIgnore = 3;
     
     
     public static void main(String[] args) {
@@ -32,7 +33,7 @@ public class Main implements Runnable {
                 .directory(directory)
                 .keepAliveSeconds(keepAliveSeconds)
                 .threadCount(threadCount)
-                .wordPairLimit(wordPairLimit)
+                .wordPairsMaxIgnore(wordPairsMaxIgnore)
                 .build()
                 .run();
     }

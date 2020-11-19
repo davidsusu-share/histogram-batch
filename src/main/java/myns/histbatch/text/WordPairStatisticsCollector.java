@@ -24,7 +24,7 @@ public class WordPairStatisticsCollector {
     
     private final Collator collator;
     
-    private final int lowBoundExclusive;
+    private final int wordPairsMaxIgnore;
     
     private final ThreadLocal<State> stateHolder = ThreadLocal.withInitial(State::new);
     
@@ -41,9 +41,9 @@ public class WordPairStatisticsCollector {
         this(locale, DEFAULT_RESULT_LIMIT);
     }
 
-    public WordPairStatisticsCollector(Locale locale, int lowBoundExclusive) {
+    public WordPairStatisticsCollector(Locale locale, int wordPairsMaxIgnore) {
         this.collator = Collator.getInstance(locale);
-        this.lowBoundExclusive = lowBoundExclusive;
+        this.wordPairsMaxIgnore = wordPairsMaxIgnore;
     }
     
 
@@ -59,6 +59,7 @@ public class WordPairStatisticsCollector {
         
         List<ResultEntry> result = extractResult();
         stateHolder.remove();
+        
         return result;
     }
     
@@ -135,7 +136,7 @@ public class WordPairStatisticsCollector {
         State state = stateHolder.get();
 
         List<ResultEntry> entries = state.statistics.entrySet().parallelStream()
-            .filter(entry -> entry.getValue()[0] > lowBoundExclusive)
+            .filter(entry -> entry.getValue()[0] > wordPairsMaxIgnore)
             .map(entry -> {
                 List<String> key = entry.getKey();
                 int count = entry.getValue()[0];
