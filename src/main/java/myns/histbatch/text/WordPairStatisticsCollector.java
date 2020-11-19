@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.io.Reader;
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableSet;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -24,7 +24,7 @@ public class WordPairStatisticsCollector {
     
     private final Collator collator;
     
-    private final int resultLimit;
+    private final int lowBoundExclusive;
     
     private final ThreadLocal<State> stateHolder = ThreadLocal.withInitial(State::new);
     
@@ -33,17 +33,17 @@ public class WordPairStatisticsCollector {
         this(Locale.getDefault(), DEFAULT_RESULT_LIMIT);
     }
 
-    public WordPairStatisticsCollector(int resultLimit) {
-        this(Locale.getDefault(), resultLimit);
+    public WordPairStatisticsCollector(int lowBoundExclusive) {
+        this(Locale.getDefault(), lowBoundExclusive);
     }
 
     public WordPairStatisticsCollector(Locale locale) {
         this(locale, DEFAULT_RESULT_LIMIT);
     }
 
-    public WordPairStatisticsCollector(Locale locale, int resultLimit) {
+    public WordPairStatisticsCollector(Locale locale, int lowBoundExclusive) {
         this.collator = Collator.getInstance(locale);
-        this.resultLimit = resultLimit;
+        this.lowBoundExclusive = lowBoundExclusive;
     }
     
 
@@ -134,26 +134,18 @@ public class WordPairStatisticsCollector {
     private List<ResultEntry> extractResult() {
         State state = stateHolder.get();
 
-        NavigableSet<ResultEntry> topEntries = new TreeSet<>(this::compareEntries);
+        List<ResultEntry> entries = state.statistics.entrySet().parallelStream()
+            .filter(entry -> entry.getValue()[0] > lowBoundExclusive)
+            .map(entry -> {
+                List<String> key = entry.getKey();
+                int count = entry.getValue()[0];
+                return new ResultEntry(key.get(0), key.get(1), count);
+            })
+            .collect(Collectors.toList());
         
-        int index = 0;
-        for (Map.Entry<List<String>, int[]> entry : state.statistics.entrySet()) {
-            List<String> key = entry.getKey();
-            String word1 = key.get(0);
-            String word2 = key.get(1);
-            int count = entry.getValue()[0];
-
-            if (index < resultLimit) {
-                topEntries.add(new ResultEntry(word1, word2, count));
-            } else if (count > topEntries.last().count) {
-                topEntries.pollLast();
-                topEntries.add(new ResultEntry(word1, word2, count));
-            }
-            
-            index++;
-        }
-
-        return new ArrayList<>(topEntries);
+        List<ResultEntry> result = new ArrayList<>(entries);
+        Collections.sort(result, this::compareEntries);
+        return result;
     }
     
     private int compareEntries(ResultEntry entry1, ResultEntry entry2) {

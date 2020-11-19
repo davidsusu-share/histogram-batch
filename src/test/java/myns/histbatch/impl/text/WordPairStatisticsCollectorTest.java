@@ -18,7 +18,7 @@ class WordPairStatisticsCollectorTest {
     @Test
     void testLongerText() throws IOException {
         WordPairStatisticsCollector collector = new WordPairStatisticsCollector(
-                new Locale("hu_HU"), 5);
+                new Locale("hu_HU"), 1);
         
         String text =
                 "Lorem ipsum alma. " +
@@ -35,8 +35,7 @@ class WordPairStatisticsCollectorTest {
                 new ResultEntry("lorem", "ipsum", 3),
                 new ResultEntry("árpa", "körte", 2),
                 new ResultEntry("ipsum", "alma", 2),
-                new ResultEntry("x-y", "g2", 2),
-                new ResultEntry("alma", "árpa", 1));
+                new ResultEntry("x-y", "g2", 2));
         
         assertThat(actual).isEqualTo(expected);
     }
