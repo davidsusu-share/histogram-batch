@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +45,8 @@ public class HistogramBatchService implements Runnable {
     
     private final int keepAliveSeconds;
     
+    private final int threadCount;
+    
     private final Locale locale;
     
     private final int wordPairLimit;
@@ -59,6 +63,7 @@ public class HistogramBatchService implements Runnable {
     private HistogramBatchService(Builder builder) {
         this.directory = builder.directory;
         this.keepAliveSeconds = builder.keepAliveSeconds;
+        this.threadCount = builder.threadCount;
         this.locale = builder.locale;
         this.wordPairLimit = builder.wordPairLimit;
     }
@@ -86,6 +91,8 @@ public class HistogramBatchService implements Runnable {
             Files.createDirectories(directory);
         }
         
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        
         IncomingItemWatcher watcher = new WatchServiceIncomingItemWatcher(
                 directory,
                 keepAliveSeconds,
@@ -96,16 +103,20 @@ public class HistogramBatchService implements Runnable {
                 new ImageGrayScaleHistogramContentProcessor(
                         new GrayScaleHistogramCollector(
                                 new LuminancePreservingGrayScaleExtractor())),
-                item -> IMAGE_MATCHER.test(item.type())));
+                item -> IMAGE_MATCHER.test(item.type()),
+                executorService));
 
         watcher.addListener(new ContentProcessorIncomingItemListener(
                 item -> openOutputStreamFor(item, "text", ".txt"),
                 new WordPairStatisticsContentProcessor(
                         new WordPairStatisticsCollector(
                                 locale, wordPairLimit)),
-                item -> TEXT_MATCHER.test(item.type())));
+                item -> TEXT_MATCHER.test(item.type()),
+                executorService));
         
         watcher.watch();
+        
+        executorService.shutdown();
     }
     
     private OutputStream openOutputStreamFor(
@@ -154,6 +165,8 @@ public class HistogramBatchService implements Runnable {
 
         private int keepAliveSeconds = 30;
         
+        private int threadCount = 1;
+        
         private Locale locale = Locale.getDefault();
         
         private int wordPairLimit = 5;
@@ -183,6 +196,11 @@ public class HistogramBatchService implements Runnable {
 
             public Optionals keepAliveSeconds(int keepAliveSeconds) {
                 Builder.this.keepAliveSeconds = keepAliveSeconds;
+                return this;
+            }
+
+            public Optionals threadCount(int threadCount) {
+                Builder.this.threadCount = threadCount;
                 return this;
             }
             

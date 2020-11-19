@@ -3,6 +3,8 @@ package myns.histbatch.watcher;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ public class ContentProcessorIncomingItemListener implements IncomingItemListene
     
     private final Predicate<IncomingItem> filter;
     
+    private final Executor executor;
+    
     
     public ContentProcessorIncomingItemListener(
             IncomingItemOutputStreamFactory outputStreamFactory,
@@ -35,9 +39,19 @@ public class ContentProcessorIncomingItemListener implements IncomingItemListene
             ContentProcessor contentProcessor,
             Predicate<IncomingItem> filter) {
 
+        this(outputStreamFactory, contentProcessor, filter, Executors.newSingleThreadExecutor());
+    }
+    
+    public ContentProcessorIncomingItemListener(
+            IncomingItemOutputStreamFactory outputStreamFactory,
+            ContentProcessor contentProcessor,
+            Predicate<IncomingItem> filter,
+            Executor executor) {
+
         this.outputStreamFactory = outputStreamFactory;
         this.contentProcessor = contentProcessor;
         this.filter = filter;
+        this.executor = executor;
     }
     
     
@@ -46,28 +60,51 @@ public class ContentProcessorIncomingItemListener implements IncomingItemListene
         String itemName = incomingItem.name();
         
         if (!filter.test(incomingItem)) {
-            logger.debug("Unmatching item: {}", itemName);
-            
             return;
         }
         
         logger.info("Detected new item: {}", itemName);
         
         try {
-            handleItem(incomingItem);
+            executor.execute(() -> handleItem(incomingItem, successCallback));
+        } catch (Exception e) {
+            logger.error("Failed to process item: {}", itemName, e);
+            successCallback.completed(false);
+        }
+    }
+
+    private void handleItem(IncomingItem incomingItem, SuccessCallback successCallback) {
+        String itemName = incomingItem.name();
+        
+        try {
+            handleItemThrows(incomingItem);
             successCallback.completed(true);
+            logger.info("Item successfully processed: {}", itemName);
         } catch (IOException e) {
             logger.error("Failed to process item: {}", itemName, e);
             successCallback.completed(false);
         }
     }
     
-    private void handleItem(IncomingItem incomingItem) throws IOException {
+    private void handleItemThrows(IncomingItem incomingItem) throws IOException {
         try (
                 InputStream in = incomingItem.openInputStream();
                 OutputStream out = outputStreamFactory.openOutputStreamFor(incomingItem);
                 ) {
+            
+            // FIXME
+            logger.debug("START: " + incomingItem.name());
+            
+            // FIXME
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+            }
+            
             contentProcessor.process(in, out);
+            
+            // FIXME
+            logger.debug("END: " + incomingItem.name());
         }
     }
     

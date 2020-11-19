@@ -81,6 +81,8 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
                 break;
             }
         }
+
+        logger.debug("Watcher stopped at {}", path);
     }
 
     private boolean acceptKey(WatchKey key) {
