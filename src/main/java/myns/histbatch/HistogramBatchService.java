@@ -132,6 +132,10 @@ public class HistogramBatchService implements Runnable {
         String targetFilename = item.name() + suffix;
         File targetFile = new File(targetDirectory, targetFilename);
         
+        if (targetFile.exists()) {
+            throw new IOException(String.format("Output file already exists: %s", targetFile));
+        }
+        
         logger.debug("Open file for writing output: {}", targetFile);
         
         return new FileOutputStream(targetFile);
