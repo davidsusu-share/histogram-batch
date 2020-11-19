@@ -91,20 +91,7 @@ public class ContentProcessorIncomingItemListener implements IncomingItemListene
                 InputStream in = incomingItem.openInputStream();
                 OutputStream out = outputStreamFactory.openOutputStreamFor(incomingItem);
                 ) {
-            
-            // FIXME
-            logger.debug("START: " + incomingItem.name());
-            
-            // FIXME
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-            }
-            
             contentProcessor.process(in, out);
-            
-            // FIXME
-            logger.debug("END: " + incomingItem.name());
         }
     }
     
