@@ -16,6 +16,9 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * File listener implementation of {@link IncomingItemWatcher}, using a {@link WatchService}
+ */
 public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher {
 
     private static final Logger logger = LoggerFactory.getLogger(

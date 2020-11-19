@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import myns.histbatch.processor.ContentProcessor;
 
+/**
+ * General {@link IncomingItemListener} implementation powered by a {@link ContentProcessor}
+ */
 public class ContentProcessorIncomingItemListener implements IncomingItemListener {
     
     private static final Logger logger = LoggerFactory.getLogger(

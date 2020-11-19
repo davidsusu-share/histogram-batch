@@ -4,6 +4,9 @@ import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * {@link Predicate} that matches to a mime type or a kind of mime types
+ */
 public class MimeItemTypeMatcher implements Predicate<Object> {
     
     private static final String WILDCARD_REPLACEMENT_FRAGMENT = "[^/]*";
@@ -14,10 +17,20 @@ public class MimeItemTypeMatcher implements Predicate<Object> {
     private final Pattern pattern;
     
 
+    /**
+     * Creates predicate matching to mime type or a glob
+     * 
+     * @param mimeGlob
+     */
     public MimeItemTypeMatcher(String mimeGlob) {
         this(parseGlob(mimeGlob));
     }
-    
+
+    /**
+     * Creates predicate matching to a {@link Pattern}
+     * 
+     * @param mimeGlob
+     */
     public MimeItemTypeMatcher(Pattern pattern) {
         this.pattern = pattern;
     }

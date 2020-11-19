@@ -5,6 +5,9 @@ import java.io.InputStream;
 
 import myns.histbatch.watcher.DefaultIncomingItem.InputStreamFactory;
 
+/**
+ * Interface for providing and abstraction for incoming content items
+ */
 public interface IncomingItem {
 
     public String name();

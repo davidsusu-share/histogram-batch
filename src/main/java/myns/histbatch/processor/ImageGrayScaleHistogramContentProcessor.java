@@ -14,6 +14,9 @@ import javax.imageio.ImageIO;
 
 import myns.histbatch.image.GrayScaleHistogramCollector;
 
+/**
+ * {@link ContentProcessor} implementation for producing a gray scale histogram image
+ */
 public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor {
     
     private static final String DEFAULT_OUT_FORMAT_NAME = "bmp";
@@ -33,7 +36,7 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
         
         this(grayScaleHistogramCollector, DEFAULT_OUT_FORMAT_NAME);
     }
-    
+
     public ImageGrayScaleHistogramContentProcessor(
             GrayScaleHistogramCollector grayScaleHistogramCollector,
             String formatName) {

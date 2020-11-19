@@ -10,6 +10,9 @@ import java.util.List;
 import myns.histbatch.text.WordPairStatisticsCollector;
 import myns.histbatch.text.WordPairStatisticsCollector.ResultEntry;
 
+/**
+ * {@link ContentProcessor} implementation for counting word pairs in textual content
+ */
 public class WordPairStatisticsContentProcessor implements ContentProcessor {
 
     private final WordPairStatisticsCollector collector;

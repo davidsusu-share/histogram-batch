@@ -2,6 +2,9 @@ package myns.histbatch.image;
 
 import java.awt.Color;
 
+/**
+ * More sophisticated {@link GrayScaleExtractor} implementation, using luminance preserving conversion
+ */
 public class LuminancePreservingGrayScaleExtractor implements GrayScaleExtractor {
 
     private static final double DATA_FACTOR = 255d;

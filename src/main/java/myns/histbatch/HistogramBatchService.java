@@ -24,6 +24,9 @@ import myns.histbatch.watcher.IncomingItemWatcher;
 import myns.histbatch.watcher.MimeItemTypeMatcher;
 import myns.histbatch.watcher.WatchServiceIncomingItemWatcher;
 
+/**
+ * Histogram and word pair statistic collector service
+ */
 public class HistogramBatchService implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(
@@ -52,6 +55,11 @@ public class HistogramBatchService implements Runnable {
     private final int wordPairsMaxIgnore;
     
 
+    /**
+     * Creates a service with the default settings
+     * 
+     * @param directory The directory to listen
+     */
     public HistogramBatchService(String directory) {
         this(Path.of(directory));
     }
@@ -68,11 +76,19 @@ public class HistogramBatchService implements Runnable {
         this.wordPairsMaxIgnore = builder.wordPairsMaxIgnore;
     }
     
+    /**
+     * Constructs a builder for setting up with more options
+     * 
+     * @return The builder
+     */
     public static Builder builder() {
         return new Builder();
     }
     
 
+    /**
+     * Starts the service and wait until finish
+     */
     @Override
     public void run() {
         try {
@@ -185,10 +201,18 @@ public class HistogramBatchService implements Runnable {
         }
         
         
+        /**
+         * @param directory The directory to listen
+         * @return
+         */
         public Optionals directory(String directory) {
             return directory(Path.of(directory));
         }
 
+        /**
+         * @param directory The directory to listen
+         * @return
+         */
         public Optionals directory(Path directory) {
             this.directory = directory;
             return new Optionals();
@@ -202,27 +226,48 @@ public class HistogramBatchService implements Runnable {
             }
             
 
+            /**
+             * @param keepAliveSeconds Keep alive in seconds, optional
+             * @return
+             */
             public Optionals keepAliveSeconds(int keepAliveSeconds) {
                 Builder.this.keepAliveSeconds = keepAliveSeconds;
                 return this;
             }
 
+            /**
+             * @param threadCount Maximum number of items can be processed in parallel, optional
+             * @return
+             */
             public Optionals threadCount(int threadCount) {
                 Builder.this.threadCount = threadCount;
                 return this;
             }
-            
+
+            /**
+             * @param locale Locale used to sort results, optional
+             * @return
+             */
             public Optionals locale(Locale locale) {
                 Builder.this.locale = locale;
                 return this;
             }
-            
+
+            /**
+             * @param wordPairsMaxIgnore Maximum count of a word pair to ignore, optional
+             * @return
+             */
             public Optionals wordPairsMaxIgnore(int wordPairsMaxIgnore) {
                 Builder.this.wordPairsMaxIgnore = wordPairsMaxIgnore;
                 return this;
             }
             
-            
+
+            /**
+             * Builds a {@link HistogramBatchService} instance
+             * 
+             * @return The built service ready to run
+             */
             public HistogramBatchService build() {
                 return new HistogramBatchService(builder());
             }

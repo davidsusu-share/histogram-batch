@@ -3,6 +3,9 @@ package myns.histbatch.watcher;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base class for {@link IncomingItemWatcher} implementations.
+ */
 public abstract class AbstractIncomingItemWatcher implements IncomingItemWatcher {
 
     private final List<IncomingItemListener> listeners = new ArrayList<>(1);

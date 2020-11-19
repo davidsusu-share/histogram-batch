@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Default {@IncomingItem} implementation
+ */
 public class DefaultIncomingItem implements IncomingItem {
 
     private final String name;

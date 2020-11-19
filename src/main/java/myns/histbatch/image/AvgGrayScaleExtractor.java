@@ -2,6 +2,9 @@ package myns.histbatch.image;
 
 import java.awt.Color;
 
+/**
+ * Simple {@link GrayScaleExtractor} implementation, calculates a simple average value
+ */
 public class AvgGrayScaleExtractor implements GrayScaleExtractor {
 
     @Override

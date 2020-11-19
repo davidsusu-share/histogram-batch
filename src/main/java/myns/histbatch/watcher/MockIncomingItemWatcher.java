@@ -2,11 +2,19 @@ package myns.histbatch.watcher;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Mock implementation of {@link IncomingItemWatcher}
+ */
 public class MockIncomingItemWatcher extends AbstractIncomingItemWatcher {
 
     private AtomicBoolean running = new AtomicBoolean(false);
     
     
+    /**
+     * Explicitly sends an item to the watcher
+     * 
+     * @param incomingItem The item
+     */
     public synchronized void send(IncomingItem incomingItem) {
         if (running.get()) {
             runListeners(incomingItem, success -> {});

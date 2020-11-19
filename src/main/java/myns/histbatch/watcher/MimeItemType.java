@@ -3,6 +3,11 @@ package myns.histbatch.watcher;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * Mime type holder for {@link IncomingItem} instances.
+ * 
+ * Short name will be the first token of the slash separated mime type string.
+ */
 public class MimeItemType implements IncomingItemType {
     
     private static final Pattern SHORTENER_PATTERN = Pattern.compile("/.*$");
@@ -19,6 +24,11 @@ public class MimeItemType implements IncomingItemType {
     }
     
     
+    /**
+     * Gets the mime type as a string
+     * 
+     * @return The mime type
+     */
     public String mimeType() {
         return mimeType;
     }

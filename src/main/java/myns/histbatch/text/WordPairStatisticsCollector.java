@@ -14,6 +14,10 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+
+/**
+ * Algorithm for collecting counting word pairs in textual content
+ */
 public class WordPairStatisticsCollector {
     
     private enum CharType { WORD, SPACE, OTHER }
@@ -29,12 +33,23 @@ public class WordPairStatisticsCollector {
     private final ThreadLocal<State> stateHolder = ThreadLocal.withInitial(State::new);
     
     
+    /**
+     * Creates an instance with default parameters
+     */
     public WordPairStatisticsCollector() {
         this(Locale.getDefault(), DEFAULT_RESULT_LIMIT);
     }
 
-    public WordPairStatisticsCollector(int lowBoundExclusive) {
-        this(Locale.getDefault(), lowBoundExclusive);
+    /**
+     * Creates an instance with the given limit.
+     * 
+     * Word pairs with a count less then or equal to this limit
+     * will be excluded from the output.
+     * 
+     * @param wordPairsMaxIgnore The limit
+     */
+    public WordPairStatisticsCollector(int wordPairsMaxIgnore) {
+        this(Locale.getDefault(), wordPairsMaxIgnore);
     }
 
     public WordPairStatisticsCollector(Locale locale) {
@@ -47,6 +62,21 @@ public class WordPairStatisticsCollector {
     }
     
 
+    /**
+     * Counts word pairs in the given textual content.
+     * 
+     * Results with count less then or equal to
+     * <code>wordPairsMaxIgnore</code> will be ignored.
+     * A word pair is a case insensitive (lower case)
+     * pair of sequences of word characters,
+     * separated by exactly one space character.
+     * Word characters are: any unicode letter and digit, and minus.
+     * Space characters are space and tab.
+     * 
+     * @param reader Textual input
+     * @return The collected statistics
+     * @throws IOException
+     */
     public List<ResultEntry> collect(Reader reader) throws IOException {
         Reader bufferedReader = new BufferedReader(reader);
         
