@@ -56,7 +56,7 @@ public class ImageGrayScaleHistogramContentProcessor implements ContentProcessor
         Graphics2D graphics = image.createGraphics();
         
         graphics.setColor(Color.WHITE);
-        graphics.drawRect(0, 0, LENGTH, HEIGHT);
+        graphics.fillRect(0, 0, LENGTH, HEIGHT);
 
         graphics.setColor(Color.BLACK);
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
