@@ -1,14 +1,38 @@
 package myns.histbatch;
 
-public class Main {
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 
+@Command(name = "HistogramBatch", version = "ASCIIArt 1.0", mixinStandardHelpOptions = true)
+public class Main implements Runnable {
+
+    @Option(names = "-i", description = "Directory to listen", arity = "1", required = true)
+    public String directory;
+
+    @Option(names = "-d", description = "Keep alive seconds", arity = "1", required = false)
+    public int keepAliveSeconds = 60;
+
+    @Option(names = "-t", description = "Thread count", arity = "1", required = false)
+    public int threadCount = 1;
+
+    @Option(names = "-n", description = "Word pair limit", arity = "1", required = false)
+    public int wordPairLimit = 3;
+    
+    
     public static void main(String[] args) {
-        
-        // TODO: args
-        
+        int exitCode = new CommandLine(new Main()).execute(args); 
+        System.exit(exitCode);
+    }
+    
+
+    @Override
+    public void run() {
         HistogramBatchService.builder()
-                .directory("/home/david/develop/pf/2020.11-neti/input/INCOMING")
-                .threadCount(2)
+                .directory(directory)
+                .keepAliveSeconds(keepAliveSeconds)
+                .threadCount(threadCount)
+                .wordPairLimit(wordPairLimit)
                 .build()
                 .run();
     }

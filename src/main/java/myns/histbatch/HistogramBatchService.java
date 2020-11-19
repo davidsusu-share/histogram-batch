@@ -133,7 +133,7 @@ public class HistogramBatchService implements Runnable {
         return new FileOutputStream(new File(targetDirectory, targetFilename));
     }
     
-    public void onComplete(IncomingItem item, File file, boolean success) throws IOException {
+    private void onComplete(IncomingItem item, File file, boolean success) throws IOException {
         if (success) {
             onSuccess(file);
         } else {

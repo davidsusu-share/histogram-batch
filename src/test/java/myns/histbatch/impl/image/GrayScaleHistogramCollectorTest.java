@@ -5,11 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-
-import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
 
