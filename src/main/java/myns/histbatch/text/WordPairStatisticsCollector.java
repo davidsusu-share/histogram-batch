@@ -19,21 +19,35 @@ public class WordPairStatisticsCollector {
     private enum CharType { WORD, SPACE, OTHER }
     
     
+    private static final int DEFAULT_RESULT_LIMIT = 10;
+    
+    
     private final Collator collator;
+    
+    private final int resultLimit;
     
     private final ThreadLocal<State> stateHolder = ThreadLocal.withInitial(State::new);
     
     
     public WordPairStatisticsCollector() {
-        this(Locale.getDefault());
+        this(Locale.getDefault(), DEFAULT_RESULT_LIMIT);
+    }
+
+    public WordPairStatisticsCollector(int resultLimit) {
+        this(Locale.getDefault(), resultLimit);
     }
 
     public WordPairStatisticsCollector(Locale locale) {
+        this(locale, DEFAULT_RESULT_LIMIT);
+    }
+
+    public WordPairStatisticsCollector(Locale locale, int resultLimit) {
         this.collator = Collator.getInstance(locale);
+        this.resultLimit = resultLimit;
     }
     
 
-    public List<ResultEntry> collect(Reader reader, int resultLimit) throws IOException {
+    public List<ResultEntry> collect(Reader reader) throws IOException {
         Reader bufferedReader = new BufferedReader(reader);
         
         int code;
@@ -43,7 +57,7 @@ public class WordPairStatisticsCollector {
         }
         doFinal();
         
-        List<ResultEntry> result = extractResult(resultLimit);
+        List<ResultEntry> result = extractResult();
         stateHolder.remove();
         return result;
     }
@@ -117,7 +131,7 @@ public class WordPairStatisticsCollector {
         }
     }
     
-    private List<ResultEntry> extractResult(int resultLimit) {
+    private List<ResultEntry> extractResult() {
         State state = stateHolder.get();
 
         NavigableSet<ResultEntry> topEntries = new TreeSet<>(this::compareEntries);

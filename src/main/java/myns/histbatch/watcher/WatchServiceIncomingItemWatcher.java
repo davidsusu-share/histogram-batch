@@ -18,13 +18,13 @@ import org.slf4j.LoggerFactory;
 
 public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher {
 
+    private static final Logger logger = LoggerFactory.getLogger(
+            WatchServiceIncomingItemWatcher.class);
+    
+    
     private static final int DEFAULT_KEEPALIVE_SECONDS = 60;
     
     private static final WatchEvent.Kind<Path> EVENT_KIND = StandardWatchEventKinds.ENTRY_CREATE;
-    
-    
-    private static final Logger logger = LoggerFactory.getLogger(
-            WatchServiceIncomingItemWatcher.class);
     
     
     private final Path path;
@@ -39,7 +39,7 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
     }
     
     public WatchServiceIncomingItemWatcher(Path path, int keepAliveSeconds) {
-        this(path, keepAliveSeconds, (file, success) -> {});
+        this(path, keepAliveSeconds, (item, file, success) -> {});
     }
     
     public WatchServiceIncomingItemWatcher(
@@ -72,6 +72,9 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
             throws IOException, InterruptedException {
         
         path.register(watchService, EVENT_KIND);
+        
+        logger.debug("WatchService registered at {}", path);
+        
         while (true) {
             WatchKey key = watchService.poll(keepAliveSeconds, TimeUnit.SECONDS);
             if (!acceptKey(key)) {
@@ -84,6 +87,8 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
         if (key == null) {
             return false;
         }
+
+        logger.debug("Key accepted at {}", path);
         
         handleKey(key);
 
@@ -100,10 +105,12 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
         if (event.kind() != EVENT_KIND) {
             return;
         }
+
+        logger.debug("{} event accepted at {}", EVENT_KIND, path);
         
         @SuppressWarnings("unchecked")
         WatchEvent<Path> pathEvent = (WatchEvent<Path>) event;
-        File file = pathEvent.context().toFile();
+        File file = new File(path.toFile(), pathEvent.context().toString());
         if (!file.isFile()) {
             return;
         }
@@ -112,18 +119,19 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
     }
     
     private void handleFile(File file) {
-        Object type = detectItemType(file);
+        IncomingItemType type = detectItemType(file);
         if (type == null) {
-            handleCompleted(file, false);
+            logger.debug("Type detection failed for {}", path);
+            
             return;
         }
         
         String name = new FileNamePartExtractor().extract(file);
-        IncomingItem incomingItem = IncomingItem.of(name, type, () -> new FileInputStream(file));
-        runListeners(incomingItem, success -> handleCompleted(file, success));
+        IncomingItem item = IncomingItem.of(name, type, () -> new FileInputStream(file));
+        runListeners(item, success -> handleCompleted(item, file, success));
     }
    
-    private Object detectItemType(File file) {
+    private IncomingItemType detectItemType(File file) {
         String mimeType = null;
         try {
             mimeType = detectFileMimeType(file);
@@ -138,13 +146,13 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
         return Files.probeContentType(file.toPath());
     }
     
-    private void handleCompleted(File file, boolean success) {
+    private void handleCompleted(IncomingItem item, File file, boolean success) {
         if (!success) {
             logger.warn("Unable to process file: {}", file);
         }
         
         try {
-            completionCallback.completed(file, success);
+            completionCallback.completed(item, file, success);
         } catch (Exception e) {
             logger.error("Failed to run callback for: {}", file, e);
         }
@@ -158,7 +166,9 @@ public class WatchServiceIncomingItemWatcher extends AbstractIncomingItemWatcher
     @FunctionalInterface
     public interface CompletionCallback {
         
-        public void completed(File file, boolean success) throws Exception;
+        public void completed(
+                IncomingItem item, File file, boolean success)
+                throws Exception; // NOSONAR
         
     }
 

@@ -18,7 +18,7 @@ class WordPairStatisticsCollectorTest {
     @Test
     void testLongerText() throws IOException {
         WordPairStatisticsCollector collector = new WordPairStatisticsCollector(
-                new Locale("hu_HU"));
+                new Locale("hu_HU"), 5);
         
         String text =
                 "Lorem ipsum alma. " +
@@ -29,7 +29,7 @@ class WordPairStatisticsCollectorTest {
         
         Reader reader = new StringReader(text);
         
-        List<ResultEntry> actual = collector.collect(reader, 5);
+        List<ResultEntry> actual = collector.collect(reader);
         
         List<ResultEntry> expected = List.of(
                 new ResultEntry("lorem", "ipsum", 3),

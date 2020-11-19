@@ -9,20 +9,20 @@ public class DefaultIncomingItem implements IncomingItem {
 
     private final String name;
 
-    private final Object type;
+    private final IncomingItemType type;
 
     private final InputStreamFactory inputStreamFactory;
     
 
-    public DefaultIncomingItem(String name, Object type, String content) {
+    public DefaultIncomingItem(String name, IncomingItemType type, String content) {
         this(name, type, content.getBytes(StandardCharsets.UTF_8));
     }
 
-    public DefaultIncomingItem(String name, Object type, byte[] content) {
+    public DefaultIncomingItem(String name, IncomingItemType type, byte[] content) {
         this(name, type, () -> new ByteArrayInputStream(content));
     }
     
-    public DefaultIncomingItem(String name, Object type, InputStreamFactory inputStreamFactory) {
+    public DefaultIncomingItem(String name, IncomingItemType type, InputStreamFactory inputStreamFactory) {
         this.name = name;
         this.type = type;
         this.inputStreamFactory = inputStreamFactory;
@@ -35,7 +35,7 @@ public class DefaultIncomingItem implements IncomingItem {
     }
 
     @Override
-    public Object type() {
+    public IncomingItemType type() {
         return type;
     }
 

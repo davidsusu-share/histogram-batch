@@ -9,20 +9,20 @@ public interface IncomingItem {
 
     public String name();
     
-    public Object type();
+    public IncomingItemType type();
     
     public InputStream openInputStream() throws IOException;
     
 
-    public static IncomingItem of(String name, Object type, String content) {
+    public static IncomingItem of(String name, IncomingItemType type, String content) {
         return new DefaultIncomingItem(name, type, content);
     }
 
-    public static IncomingItem of(String name, Object type, byte[] content) {
+    public static IncomingItem of(String name, IncomingItemType type, byte[] content) {
         return new DefaultIncomingItem(name, type, content);
     }
 
-    public static IncomingItem of(String name, Object type, InputStreamFactory inputStreamFactory) {
+    public static IncomingItem of(String name, IncomingItemType type, InputStreamFactory inputStreamFactory) {
         return new DefaultIncomingItem(name, type, inputStreamFactory);
     }
 
